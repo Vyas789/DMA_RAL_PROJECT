@@ -1,5 +1,5 @@
 # vsim "+define+UVM_REG_NO_INDIVIDUAL_FIELD_ACCESS" -vopt work.tb -voptargs="+acc=npr" -assertdebug -l simulation.log -coverage -c -do "coverage save -onexit -assert -directive -cvg -codeAll dma_coverage.ucdb; run -all; exit" "+UVM_TESTNAME=dma_test" "+UVM_VERBOSITY=UVM_MEDIUM" 
-# Start time: 16:17:26 on Jan 27,2026
+# Start time: 16:30:43 on Jan 27,2026
 # ** Note: (vsim-3812) Design is being optimized...
 # //  Questa Sim
 # //  Version 10.6c linux Jul 25 2017
@@ -235,19 +235,38 @@
 # UVM_INFO dma_monitor.sv(29) @ 1625: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1048, wdata = 37027839,wr_en = 0, rd_en = 1, rdata = 0 
 # UVM_INFO dma_sequence.sv(157) @ 1645: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] transfer_count_inst after FRONTDOOR READ - Desired: 0x0, Mirrored: 0x0
 # UVM_INFO dma_sequence.sv(194) @ 1645: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] -------transfer_count_inst RO Test Complete -------
-# UVM_INFO dma_sequence.sv(40) @ 1645: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] DMA Sequence Completed
-# UVM_INFO dma_monitor.sv(29) @ 1665: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1048, wdata = 37027839,wr_en = 0, rd_en = 1, rdata = 0 
-# UVM_INFO dma_monitor.sv(29) @ 1705: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1048, wdata = 37027839,wr_en = 0, rd_en = 1, rdata = 0 
-# UVM_INFO dma_monitor.sv(29) @ 1745: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1048, wdata = 37027839,wr_en = 0, rd_en = 1, rdata = 0 
-# UVM_INFO dma_monitor.sv(29) @ 1785: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1048, wdata = 37027839,wr_en = 0, rd_en = 1, rdata = 0 
-# UVM_INFO dma_monitor.sv(29) @ 1825: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1048, wdata = 37027839,wr_en = 0, rd_en = 1, rdata = 0 
-# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1268) @ 1845: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
-# UVM_INFO dma_subscriber.sv(47) @ 1845: uvm_test_top.env.sub [dma_subscriber] Coverage --> 94.00
+# UVM_INFO dma_sequence.sv(207) @ 1645: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] --------Testing W1C Register: error_status_inst--------
+# UVM_INFO dma_sequence.sv(209) @ 1645: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] Backdoor write to error_status_inst: 0x1b (setting error bits)
+# UVM_INFO dma_sequence.sv(215) @ 1645: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] Reading error_status_inst before W1C operation
+# UVM_INFO dma_driver.sv(35) @ 1655: uvm_test_top.env.agent_inst.drv [dma_driver] addr = 1056, wdata = x,wr_en = 0, rd_en = 1 
+# UVM_INFO dma_monitor.sv(29) @ 1665: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1056, wdata = 37027839,wr_en = 0, rd_en = 1, rdata = 27 
+# UVM_INFO dma_sequence.sv(225) @ 1685: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] error_status_inst before CLEAR - Desired: 0x1b, Mirrored: 0x1b, ReadData: 0x1b
+# UVM_INFO dma_sequence.sv(228) @ 1685: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] error_status_inst Error bits set correctly: 0x1b 
+# UVM_INFO dma_sequence.sv(232) @ 1685: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] Writing 0x1b to error_status_inst to clear set bits (W1C)
+# UVM_INFO dma_driver.sv(35) @ 1695: uvm_test_top.env.agent_inst.drv [dma_driver] addr = 1056, wdata = 27,wr_en = 1, rd_en = 0 
+# UVM_INFO dma_monitor.sv(29) @ 1705: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1056, wdata = 27,wr_en = 1, rd_en = 0, rdata = 27 
+# UVM_INFO dma_sequence.sv(238) @ 1725: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] Reading error_status_inst after W1C operation
+# UVM_INFO dma_driver.sv(35) @ 1735: uvm_test_top.env.agent_inst.drv [dma_driver] addr = 1056, wdata = x,wr_en = 0, rd_en = 1 
+# UVM_INFO dma_monitor.sv(29) @ 1745: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1056, wdata = 27,wr_en = 0, rd_en = 1, rdata = 0 
+# UVM_INFO dma_sequence.sv(246) @ 1765: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] error_status_inst after CLEAR - Desired: 0x0, Mirrored: 0x0, ReadData: 0x0
+# UVM_INFO dma_sequence.sv(249) @ 1765: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] error_status_inst Bits successfully cleared 
+# UVM_INFO dma_driver.sv(35) @ 1775: uvm_test_top.env.agent_inst.drv [dma_driver] addr = 1056, wdata = x,wr_en = 0, rd_en = 1 
+# UVM_INFO dma_monitor.sv(29) @ 1785: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1056, wdata = 27,wr_en = 0, rd_en = 1, rdata = 0 
+# UVM_INFO dma_sequence.sv(258) @ 1805: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] error_status_inst Mirror verification passed
+# UVM_INFO dma_sequence.sv(260) @ 1805: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] ---------- error_status_inst W1C Test Complete -------------
+# UVM_INFO dma_sequence.sv(40) @ 1805: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] DMA Sequence Completed
+# UVM_INFO dma_monitor.sv(29) @ 1825: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1056, wdata = 27,wr_en = 0, rd_en = 1, rdata = 0 
+# UVM_INFO dma_monitor.sv(29) @ 1865: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1056, wdata = 27,wr_en = 0, rd_en = 1, rdata = 0 
+# UVM_INFO dma_monitor.sv(29) @ 1905: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1056, wdata = 27,wr_en = 0, rd_en = 1, rdata = 0 
+# UVM_INFO dma_monitor.sv(29) @ 1945: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1056, wdata = 27,wr_en = 0, rd_en = 1, rdata = 0 
+# UVM_INFO dma_monitor.sv(29) @ 1985: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1056, wdata = 27,wr_en = 0, rd_en = 1, rdata = 0 
+# UVM_INFO verilog_src/uvm-1.1d/src/base/uvm_objection.svh(1268) @ 2005: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+# UVM_INFO dma_subscriber.sv(47) @ 2005: uvm_test_top.env.sub [dma_subscriber] Coverage --> 100.00
 # 
 # --- UVM Report Summary ---
 # 
 # ** Report counts by severity
-# UVM_INFO :  196
+# UVM_INFO :  215
 # UVM_WARNING :    0
 # UVM_ERROR :    0
 # UVM_FATAL :    0
@@ -255,12 +274,12 @@
 # [Questa UVM]     2
 # [RNTST]     1
 # [TEST_DONE]     1
-# [dma_driver]    41
-# [dma_monitor]    46
-# [dma_sequence]   104
+# [dma_driver]    45
+# [dma_monitor]    50
+# [dma_sequence]   115
 # [dma_subscriber]     1
 # ** Note: $finish    : /tools/mentor/questasim_10.6c/questasim/linux/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
-#    Time: 1845 ns  Iteration: 53  Instance: /tb
+#    Time: 2005 ns  Iteration: 53  Instance: /tb
 # Saving coverage database on exit...
-# End time: 16:17:30 on Jan 27,2026, Elapsed time: 0:00:04
+# End time: 16:30:47 on Jan 27,2026, Elapsed time: 0:00:04
 # Errors: 0, Warnings: 0

@@ -35,7 +35,7 @@ class dma_sequence extends uvm_sequence #(dma_seq_item);
     read_only_reg(reg_block.intr_inst, status);
     read_only_reg(reg_block.transfer_count_inst, status);
 
-//     write_1_clear_reg(reg_block.error_status_inst, status, 32'h000000FF);
+    write_1_clear_reg(reg_block.error_status_inst, status, 32'h0000001B);
     
     `uvm_info(get_type_name(), "DMA Sequence Completed", UVM_MEDIUM)
   endtask
@@ -207,7 +207,7 @@ virtual task read_write_reg(uvm_reg register_inst, uvm_status_e status, uvm_reg_
   `uvm_info(get_type_name(), $sformatf("--------Testing W1C Register: %s--------", reg_name), UVM_MEDIUM)
 
     `uvm_info(get_type_name(), $sformatf("Backdoor write to %s: 0x%0h (setting error bits)", reg_name, set_bits), UVM_MEDIUM)
-  register_inst.write(status, set_bits, UVM_BACKDOOR);
+  register_inst.poke(status, set_bits);
     
     if(status != UVM_IS_OK)
       `uvm_error(get_type_name(), $sformatf("%s Backdoor write failed", reg_name))

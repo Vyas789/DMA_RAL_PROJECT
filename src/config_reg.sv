@@ -11,12 +11,31 @@ class config_reg extends uvm_reg;
   rand uvm_reg_field descriptor_mode;
   uvm_reg_field reserved;
 
- covergroup config_cov;
-    option.per_instance = 1;
+covergroup config_cov;
+  option.per_instance = 1;
 
-    priority_cp : coverpoint priority_field.value {bins low = {0}; bins high = {3}; }
-    int_cp      : coverpoint interrupt_enable.value;
-  endgroup
+  priority_field_cp: coverpoint priority_field.value {
+    bins levels[] = {[0:3]};
+  }
+  auto_restart_cp: coverpoint auto_restart.value {
+    bins disabled = {0};
+    bins enabled  = {1};
+  }
+  intr_enable_cp: coverpoint interrupt_enable.value {
+    bins disabled = {0};
+    bins enabled  = {1};
+  }
+  burst_size_cp: coverpoint burst_size.value {
+    bins sizes[] = {[0:3]};
+  }
+  data_width_cp: coverpoint data_width.value {
+    bins widths[] = {[0:3]};
+  }
+  desc_mode_cp: coverpoint descriptor_mode.value {
+    bins direct_mode = {0};
+    bins desc_mode   = {1};
+  }
+endgroup 
 
   function new(string name = "config_reg");
     super.new(name, 32, UVM_CVR_FIELD_VALS);

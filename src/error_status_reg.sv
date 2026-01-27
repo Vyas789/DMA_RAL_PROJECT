@@ -11,13 +11,27 @@ class error_status_reg extends uvm_reg;
   uvm_reg_field error_code;
   uvm_reg_field error_addr_offset;
 
-  covergroup error_cov;
-    option.per_instance = 1;
+ covergroup error_cov;
+  option.per_instance = 1;
 
-    err_cp : coverpoint {bus_error.value, timeout_error.value, alignment_error.value,
-                         overflow_error.value, underflow_error.value};
-  endgroup
+  bus_error_cp       : coverpoint bus_error.value       { bins no_err = {0}; bins err = {1}; }
+  timeout_error_cp   : coverpoint timeout_error.value   { bins no_err = {0}; bins err = {1}; }
+  alignment_error_cp : coverpoint alignment_error.value { bins no_err = {0}; bins err = {1}; }
+  overflow_cp        : coverpoint overflow_error.value  { bins no_err = {0}; bins err = {1}; }
+  underflow_cp       : coverpoint underflow_error.value { bins no_err = {0}; bins err = {1}; }
 
+  error_code_cp : coverpoint error_code.value {
+    bins no_error_code = {0};
+    bins valid_codes = {[1:255]};
+  }
+
+  error_addr_cp : coverpoint error_addr_offset.value {
+    bins zero_offset = {0};
+    bins non_zero    = {[1:$]};
+  }
+
+endgroup
+ 
   function new(string name = "error_status_reg");
     super.new(name, 32, UVM_CVR_FIELD_VALS);
     if (has_coverage(UVM_CVR_FIELD_VALS))

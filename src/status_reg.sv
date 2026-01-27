@@ -10,13 +10,16 @@ rand uvm_reg_field current_state;
 rand uvm_reg_field fifo_level;
 rand uvm_reg_field reserved;
  
- covergroup status_cov;
+  covergroup status_cov;
     option.per_instance = 1;
 
-    busy_cp  : coverpoint busy.value;
-    done_cp  : coverpoint done.value;
-    error_cp : coverpoint error.value;
-  endgroup
+    busy_cp  : coverpoint busy.value {bins inactive = {0}; bins active = {1};}
+    done_cp  : coverpoint done.value {bins not_done = {0}; bins done = {1};}
+    error_cp : coverpoint error.value {bins no_error = {0}; bins error = {1};}
+    paused_cp : coverpoint paused.value {bins running = {0}; bins paused = {1};}
+    current_state_cp : coverpoint current_state.value { bins all_states[] = {[0:15]};}
+    fifo_level_cp : coverpoint fifo_level.value { bins empty = {0}; bins mid = {[1:254]}; bins full = {255};}
+  endgroup 
 
   function new(string name = "status_reg");
     super.new(name, 32, UVM_CVR_FIELD_VALS);

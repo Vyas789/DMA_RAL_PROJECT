@@ -11,9 +11,30 @@ class error_status_reg extends uvm_reg;
   uvm_reg_field error_code;
   uvm_reg_field error_addr_offset;
 
-  function new(string name="error_status_reg");
+  covergroup error_cov;
+    option.per_instance = 1;
+
+    err_cp : coverpoint {bus_error.value, timeout_error.value, alignment_error.value,
+                         overflow_error.value, underflow_error.value};
+  endgroup
+
+  function new(string name = "error_status_reg");
     super.new(name, 32, UVM_CVR_FIELD_VALS);
+    if (has_coverage(UVM_CVR_FIELD_VALS))
+      error_cov = new();
   endfunction
+
+  virtual function void sample(uvm_reg_data_t data,
+                               uvm_reg_data_t byte_en,
+                               bit is_read,
+                               uvm_reg_map map);
+    error_cov.sample();
+  endfunction
+
+  virtual function void sample_values();
+    super.sample_values();
+    error_cov.sample();
+  endfunction 
 
     function void build();
     bus_error = uvm_reg_field::type_id::create("bus_error");

@@ -10,11 +10,32 @@ rand uvm_reg_field current_state;
 rand uvm_reg_field fifo_level;
 rand uvm_reg_field reserved;
  
-  function new(string name="status_reg");
-super.new(name,32,UVM_CVR_FIELD_VALS);
-endfunction
+ covergroup status_cov;
+    option.per_instance = 1;
 
- 
+    busy_cp  : coverpoint busy.value;
+    done_cp  : coverpoint done.value;
+    error_cp : coverpoint error.value;
+  endgroup
+
+  function new(string name = "status_reg");
+    super.new(name, 32, UVM_CVR_FIELD_VALS);
+    if (has_coverage(UVM_CVR_FIELD_VALS))
+      status_cov = new();
+  endfunction
+
+  virtual function void sample(uvm_reg_data_t data,
+                               uvm_reg_data_t byte_en,
+                               bit is_read,
+                               uvm_reg_map map);
+    status_cov.sample();
+  endfunction
+
+  virtual function void sample_values();
+    super.sample_values();
+    status_cov.sample();
+  endfunction
+  
 function void build;
 busy=uvm_reg_field::type_id::create("busy");
 done=uvm_reg_field::type_id::create("done");

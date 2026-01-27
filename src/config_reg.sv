@@ -11,9 +11,30 @@ class config_reg extends uvm_reg;
   rand uvm_reg_field descriptor_mode;
   uvm_reg_field reserved;
 
-  function new(string name="config_reg");
+ covergroup config_cov;
+    option.per_instance = 1;
+
+    priority_cp : coverpoint priority_field.value {bins low = {0}; bins high = {3}; }
+    int_cp      : coverpoint interrupt_enable.value;
+  endgroup
+
+  function new(string name = "config_reg");
     super.new(name, 32, UVM_CVR_FIELD_VALS);
+    if (has_coverage(UVM_CVR_FIELD_VALS))
+      config_cov = new();
   endfunction
+
+  virtual function void sample(uvm_reg_data_t data,
+                               uvm_reg_data_t byte_en,
+                               bit is_read,
+                               uvm_reg_map map);
+    config_cov.sample();
+  endfunction
+
+  virtual function void sample_values();
+    super.sample_values();
+    config_cov.sample();
+  endfunction 
 
    function void build();
      priority_field = uvm_reg_field::type_id::create("priority_field");

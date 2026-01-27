@@ -1,5 +1,6 @@
 `include "dma_intf.sv"
 `include "dma_pkg.sv"
+`include "design.sv"
 
 import uvm_pkg::*;
 import dma_pkg::*;

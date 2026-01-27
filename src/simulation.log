@@ -1,5 +1,5 @@
-# vsim -c tb 
-# Start time: 12:12:14 on Jan 27,2026
+# vsim "+define+UVM_REG_NO_INDIVIDUAL_FIELD_ACCESS" -vopt work.tb -voptargs="+acc=npr" -assertdebug -l simulation.log -coverage -c -do "coverage save -onexit -assert -directive -cvg -codeAll dma_coverage.ucdb; run -all; exit" "+UVM_TESTNAME=dma_test" "+UVM_VERBOSITY=UVM_MEDIUM" 
+# Start time: 12:35:50 on Jan 27,2026
 # ** Note: (vsim-3812) Design is being optimized...
 # //  Questa Sim
 # //  Version 10.6c linux Jul 25 2017
@@ -21,8 +21,12 @@
 # Loading work.dma_pkg(fast)
 # Loading work.top_sv_unit(fast)
 # Loading work.tb(fast)
+# Loading work.dma_intf(fast)
+# Loading work.dma_design(fast)
 # Loading mtiUvm.questa_uvm_pkg(fast)
 # Loading /tools/mentor/questasim_10.6c/questasim/uvm-1.1d/linux/uvm_dpi.so
+# coverage save -onexit -assert -directive -cvg -codeAll dma_coverage.ucdb
+#  run -all
 # ----------------------------------------------------------------
 # UVM-1.1d
 # (C) 2007-2013 Mentor Graphics Corporation
@@ -64,10 +68,7 @@
 # UVM_INFO dma_monitor.sv(29) @ 145: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1036, wdata = 3735928559,wr_en = 0, rd_en = 1, rdata = 3735928559 
 # UVM_INFO dma_sequence.sv(95) @ 165: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] mem_addr_inst Mirror verification passed after read (FD)
 # UVM_INFO dma_sequence.sv(99) @ 165: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] Reading from mem_addr_inst via BACKDOOR
-# UVM_ERROR: Unable to read value from 'tb.dut.mem_addr'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR dma_sequence.sv(103) @ 165: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] mem_addr_inst Read (BACKDOOR) failed with status: UVM_NOT_OK
-# UVM_INFO dma_sequence.sv(107) @ 165: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] mem_addr_inst after READ (BD) - Desired: 0x3735928559, Mirrored: 0x3735928559, ReadData: 0x0
+# UVM_INFO dma_sequence.sv(107) @ 165: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] mem_addr_inst after READ (BD) - Desired: 0x3735928559, Mirrored: 0x3735928559, ReadData: 0x3735928559
 # UVM_INFO dma_driver.sv(35) @ 175: uvm_test_top.env.agent_inst.drv [dma_driver] addr = 1036, wdata = x,wr_en = 0, rd_en = 1 
 # UVM_INFO dma_monitor.sv(29) @ 185: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1036, wdata = 3735928559,wr_en = 0, rd_en = 1, rdata = 3735928559 
 # UVM_INFO dma_sequence.sv(113) @ 205: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] mem_addr_inst Mirror verification passed after read (BD)
@@ -89,14 +90,7 @@
 # UVM_INFO dma_monitor.sv(29) @ 345: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1028, wdata = 122608,wr_en = 0, rd_en = 1, rdata = 122608 
 # UVM_INFO dma_sequence.sv(95) @ 365: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] ctrl_inst Mirror verification passed after read (FD)
 # UVM_INFO dma_sequence.sv(99) @ 365: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] Reading from ctrl_inst via BACKDOOR
-# UVM_ERROR: Unable to read value from 'tb.dut.ctrl_start_dma'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR: Unable to read value from 'tb.dut.ctrl_w_count'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR: Unable to read value from 'tb.dut.ctrl_io_mem'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR dma_sequence.sv(103) @ 365: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] ctrl_inst Read (BACKDOOR) failed with status: UVM_NOT_OK
-# UVM_INFO dma_sequence.sv(107) @ 365: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] ctrl_inst after READ (BD) - Desired: 0x122608, Mirrored: 0x122608, ReadData: 0x0
+# UVM_INFO dma_sequence.sv(107) @ 365: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] ctrl_inst after READ (BD) - Desired: 0x122608, Mirrored: 0x122608, ReadData: 0x122608
 # UVM_INFO dma_driver.sv(35) @ 375: uvm_test_top.env.agent_inst.drv [dma_driver] addr = 1028, wdata = x,wr_en = 0, rd_en = 1 
 # UVM_INFO dma_monitor.sv(29) @ 385: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1028, wdata = 122608,wr_en = 0, rd_en = 1, rdata = 122608 
 # UVM_INFO dma_sequence.sv(113) @ 405: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] ctrl_inst Mirror verification passed after read (BD)
@@ -118,10 +112,7 @@
 # UVM_INFO dma_monitor.sv(29) @ 545: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1032, wdata = 305419896,wr_en = 0, rd_en = 1, rdata = 305419896 
 # UVM_INFO dma_sequence.sv(95) @ 565: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] io_addr_inst Mirror verification passed after read (FD)
 # UVM_INFO dma_sequence.sv(99) @ 565: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] Reading from io_addr_inst via BACKDOOR
-# UVM_ERROR: Unable to read value from 'tb.dut.io_addr'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR dma_sequence.sv(103) @ 565: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] io_addr_inst Read (BACKDOOR) failed with status: UVM_NOT_OK
-# UVM_INFO dma_sequence.sv(107) @ 565: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] io_addr_inst after READ (BD) - Desired: 0x305419896, Mirrored: 0x305419896, ReadData: 0x0
+# UVM_INFO dma_sequence.sv(107) @ 565: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] io_addr_inst after READ (BD) - Desired: 0x305419896, Mirrored: 0x305419896, ReadData: 0x305419896
 # UVM_INFO dma_driver.sv(35) @ 575: uvm_test_top.env.agent_inst.drv [dma_driver] addr = 1032, wdata = x,wr_en = 0, rd_en = 1 
 # UVM_INFO dma_monitor.sv(29) @ 585: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1032, wdata = 305419896,wr_en = 0, rd_en = 1, rdata = 305419896 
 # UVM_INFO dma_sequence.sv(113) @ 605: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] io_addr_inst Mirror verification passed after read (BD)
@@ -143,10 +134,7 @@
 # UVM_INFO dma_monitor.sv(29) @ 745: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1040, wdata = 2882400000,wr_en = 0, rd_en = 1, rdata = 2882400000 
 # UVM_INFO dma_sequence.sv(95) @ 765: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] extra_info_inst Mirror verification passed after read (FD)
 # UVM_INFO dma_sequence.sv(99) @ 765: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] Reading from extra_info_inst via BACKDOOR
-# UVM_ERROR: Unable to read value from 'tb.dut.extra_info'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR dma_sequence.sv(103) @ 765: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] extra_info_inst Read (BACKDOOR) failed with status: UVM_NOT_OK
-# UVM_INFO dma_sequence.sv(107) @ 765: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] extra_info_inst after READ (BD) - Desired: 0x2882400000, Mirrored: 0x2882400000, ReadData: 0x0
+# UVM_INFO dma_sequence.sv(107) @ 765: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] extra_info_inst after READ (BD) - Desired: 0x2882400000, Mirrored: 0x2882400000, ReadData: 0x2882400000
 # UVM_INFO dma_driver.sv(35) @ 775: uvm_test_top.env.agent_inst.drv [dma_driver] addr = 1040, wdata = x,wr_en = 0, rd_en = 1 
 # UVM_INFO dma_monitor.sv(29) @ 785: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1040, wdata = 2882400000,wr_en = 0, rd_en = 1, rdata = 2882400000 
 # UVM_INFO dma_sequence.sv(113) @ 805: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] extra_info_inst Mirror verification passed after read (BD)
@@ -168,10 +156,7 @@
 # UVM_INFO dma_monitor.sv(29) @ 945: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1052, wdata = 287454020,wr_en = 0, rd_en = 1, rdata = 287454020 
 # UVM_INFO dma_sequence.sv(95) @ 965: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] descriptor_addr_inst Mirror verification passed after read (FD)
 # UVM_INFO dma_sequence.sv(99) @ 965: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] Reading from descriptor_addr_inst via BACKDOOR
-# UVM_ERROR: Unable to read value from 'tb.dut.descriptor_addr'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR dma_sequence.sv(103) @ 965: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] descriptor_addr_inst Read (BACKDOOR) failed with status: UVM_NOT_OK
-# UVM_INFO dma_sequence.sv(107) @ 965: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] descriptor_addr_inst after READ (BD) - Desired: 0x287454020, Mirrored: 0x287454020, ReadData: 0x0
+# UVM_INFO dma_sequence.sv(107) @ 965: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] descriptor_addr_inst after READ (BD) - Desired: 0x287454020, Mirrored: 0x287454020, ReadData: 0x287454020
 # UVM_INFO dma_driver.sv(35) @ 975: uvm_test_top.env.agent_inst.drv [dma_driver] addr = 1052, wdata = x,wr_en = 0, rd_en = 1 
 # UVM_INFO dma_monitor.sv(29) @ 985: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1052, wdata = 287454020,wr_en = 0, rd_en = 1, rdata = 287454020 
 # UVM_INFO dma_sequence.sv(113) @ 1005: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] descriptor_addr_inst Mirror verification passed after read (BD)
@@ -193,20 +178,7 @@
 # UVM_INFO dma_monitor.sv(29) @ 1145: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1060, wdata = 85,wr_en = 0, rd_en = 1, rdata = 85 
 # UVM_INFO dma_sequence.sv(95) @ 1165: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] config_inst Mirror verification passed after read (FD)
 # UVM_INFO dma_sequence.sv(99) @ 1165: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] Reading from config_inst via BACKDOOR
-# UVM_ERROR: Unable to read value from 'tb.dut.config_priority'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR: Unable to read value from 'tb.dut.config_auto_restart'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR: Unable to read value from 'tb.dut.config_interrupt_enable'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR: Unable to read value from 'tb.dut.config_burst_size'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR: Unable to read value from 'tb.dut.config_data_width'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR: Unable to read value from 'tb.dut.config_descriptor_mode'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR dma_sequence.sv(103) @ 1165: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] config_inst Read (BACKDOOR) failed with status: UVM_NOT_OK
-# UVM_INFO dma_sequence.sv(107) @ 1165: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] config_inst after READ (BD) - Desired: 0x85, Mirrored: 0x85, ReadData: 0x0
+# UVM_INFO dma_sequence.sv(107) @ 1165: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] config_inst after READ (BD) - Desired: 0x85, Mirrored: 0x85, ReadData: 0x85
 # UVM_INFO dma_driver.sv(35) @ 1175: uvm_test_top.env.agent_inst.drv [dma_driver] addr = 1060, wdata = x,wr_en = 0, rd_en = 1 
 # UVM_INFO dma_monitor.sv(29) @ 1185: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1060, wdata = 85,wr_en = 0, rd_en = 1, rdata = 85 
 # UVM_INFO dma_sequence.sv(113) @ 1205: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] config_inst Mirror verification passed after read (BD)
@@ -228,12 +200,7 @@
 # UVM_INFO dma_monitor.sv(29) @ 1345: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1024, wdata = 3735879680,wr_en = 0, rd_en = 1, rdata = 3735879680 
 # UVM_INFO dma_sequence.sv(95) @ 1365: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] intr_inst Mirror verification passed after read (FD)
 # UVM_INFO dma_sequence.sv(99) @ 1365: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] Reading from intr_inst via BACKDOOR
-# UVM_ERROR: Unable to read value from 'tb.dut.intr_mask'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR: Unable to read value from 'tb.dut.intr_status'
-#  Either the path is incorrect, or you may not have PLI/ACC visibility to that object.
-# UVM_ERROR dma_sequence.sv(103) @ 1365: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] intr_inst Read (BACKDOOR) failed with status: UVM_NOT_OK
-# UVM_INFO dma_sequence.sv(107) @ 1365: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] intr_inst after READ (BD) - Desired: 0x3735879680, Mirrored: 0x3735879680, ReadData: 0x0
+# UVM_INFO dma_sequence.sv(107) @ 1365: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] intr_inst after READ (BD) - Desired: 0x3735879680, Mirrored: 0x3735879680, ReadData: 0x3735879680
 # UVM_INFO dma_driver.sv(35) @ 1375: uvm_test_top.env.agent_inst.drv [dma_driver] addr = 1024, wdata = x,wr_en = 0, rd_en = 1 
 # UVM_INFO dma_monitor.sv(29) @ 1385: uvm_test_top.env.agent_inst.mon [dma_monitor] addr = 1024, wdata = 3735879680,wr_en = 0, rd_en = 1, rdata = 3735879680 
 # UVM_INFO dma_sequence.sv(113) @ 1405: uvm_test_top.env.agent_inst.seqr@@bseq [dma_sequence] intr_inst Mirror verification passed after read (BD)
@@ -282,7 +249,7 @@
 # ** Report counts by severity
 # UVM_INFO :  196
 # UVM_WARNING :    0
-# UVM_ERROR :    7
+# UVM_ERROR :    0
 # UVM_FATAL :    0
 # ** Report counts by id
 # [Questa UVM]     2
@@ -290,9 +257,10 @@
 # [TEST_DONE]     1
 # [dma_driver]    41
 # [dma_monitor]    46
-# [dma_sequence]   111
+# [dma_sequence]   104
 # [dma_subscriber]     1
 # ** Note: $finish    : /tools/mentor/questasim_10.6c/questasim/linux/../verilog_src/uvm-1.1d/src/base/uvm_root.svh(430)
 #    Time: 1845 ns  Iteration: 53  Instance: /tb
-# End time: 12:12:23 on Jan 27,2026, Elapsed time: 0:00:09
+# Saving coverage database on exit...
+# End time: 12:35:54 on Jan 27,2026, Elapsed time: 0:00:04
 # Errors: 0, Warnings: 0

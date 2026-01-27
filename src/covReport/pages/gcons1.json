@@ -1,0 +1,5 @@
+var g_db_data = [
+{dummy:0},
+{name:'dma_reg_cg',f:1,type:6,id:1471,tb:'54',h:'49',m:'5',hp:'90.74%',cov:['94.00%','G'],g:'100.00%',gp:['94.00%','G'],opts:[[],['merge_instance','auto(true)']],hdlPath:'/dma_pkg/dma_subscriber',parent:'1466'},
+{name:'dma_reg_cg',f:1,type:6,id:1952,tb:'54',h:'49',m:'5',hp:'90.74%',cov:['94.00%','G'],g:'100.00%',gp:['94.00%','G'],opts:[[],['merge_instance','true']],hdlPath:'work.dma_pkg::dma_subscriber',parent:'1947'}];
+processConsCovergroupsData(g_db_data);

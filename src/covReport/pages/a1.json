@@ -1,12 +1,12 @@
 var g_data = {
-a1533:{
-scopes:[{s:'1222',b:'1',val:'dma_pkg'},{val:'dma_adapter'},{link:'z.htm?f=0&s=1533',val:'bus2reg'}]
-,assertions:[{dummy:0},{cr:'c',c:'g',z:'immed__20',fc:'Gr',pc:'Gr',h0:'0',h1:'94'}
+a1547:{
+scopes:[{s:'1236',b:'1',val:'dma_pkg'},{val:'dma_adapter'},{link:'z.htm?f=0&s=1547',val:'bus2reg'}]
+,assertions:[{dummy:0},{cr:'c',c:'g',z:'immed__20',fc:'Gr',pc:'Gr',h0:'0',h1:'1010'}
 ],
 },
-a2120:{
-scopes:[{s:'1809',b:'1',val:'work.dma_pkg'},{val:'dma_adapter'},{link:'z.htm?f=0&s=2120',val:'bus2reg'}]
-,assertions:[{dummy:0},{cr:'c',c:'g',z:'immed__20',fc:'Gr',pc:'Gr',h0:'0',h1:'94'}
+a2274:{
+scopes:[{s:'1963',b:'1',val:'work.dma_pkg'},{val:'dma_adapter'},{link:'z.htm?f=0&s=2274',val:'bus2reg'}]
+,assertions:[{dummy:0},{cr:'c',c:'g',z:'immed__20',fc:'Gr',pc:'Gr',h0:'0',h1:'1010'}
 ],
 },
 dummyEnd:0

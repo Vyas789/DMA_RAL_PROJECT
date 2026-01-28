@@ -19,11 +19,11 @@ class dma_sequence extends uvm_sequence #(dma_seq_item);
       starting_phase.drop_objection(this);
   endtask
 
-  task body();
+  virtual task body();
     
  	 `uvm_info(get_type_name(), "Starting DMA Sequence", UVM_MEDIUM)
     
-    read_write_reg(reg_block.mem_addr_inst, status, 32'hDEADBEEF);
+  /*  read_write_reg(reg_block.mem_addr_inst, status, 32'hDEADBEEF);
     read_write_reg(reg_block.ctrl_inst, status, 32'h0001DEF0);
     read_write_reg(reg_block.io_addr_inst, status, 32'h12345678);
     read_write_reg(reg_block.extra_info_inst, status, 32'hABCDEF00);
@@ -36,6 +36,7 @@ class dma_sequence extends uvm_sequence #(dma_seq_item);
     read_only_reg(reg_block.transfer_count_inst, status);
 
     write_1_clear_reg(reg_block.error_status_inst, status, 32'h0000001B);
+    */
     
     `uvm_info(get_type_name(), "DMA Sequence Completed", UVM_MEDIUM)
   endtask
@@ -48,6 +49,7 @@ virtual task read_write_reg(uvm_reg register_inst, uvm_status_e status, uvm_reg_
     uvm_reg_data_t read_data_fd;
     uvm_reg_data_t read_data_bd;
     string reg_name;
+    write_data = write_data & 32'hFFFFFFFF;
   
   //----------------------------------------WRITING ONTO FROM THE FRONTDOOR----------------------------------------//
     
@@ -260,4 +262,111 @@ virtual task read_write_reg(uvm_reg register_inst, uvm_status_e status, uvm_reg_
       `uvm_info(get_type_name(), $sformatf("---------- %s W1C Test Complete -------------", reg_name), UVM_MEDIUM)
   endtask
     
+endclass
+
+class intr_reg_sequence extends dma_sequence;
+ `uvm_object_utils(intr_reg_sequence)
+
+  function new(string name = "intr_reg_sequence");
+   super.new(name);
+  endfunction
+
+  task body();
+   read_write_reg(reg_block.intr_inst, status, 32'hDEAD0000);
+   repeat(10) begin
+    read_write_reg(reg_block.intr_inst, status, $random);
+   end
+   endtask
+endclass
+
+class ctrl_reg_sequence extends dma_sequence;
+  `uvm_object_utils(ctrl_reg_sequence)
+
+      function new(string name = "ctrl_reg_sequence");
+        super.new(name);
+      endfunction
+
+      task body();
+        read_write_reg(reg_block.ctrl_inst, status, 32'h0001DEF0);
+        repeat(10) begin
+          read_write_reg(reg_block.ctrl_inst, status, $random);
+        end
+      endtask 
+    endclass
+
+class io_addr_reg_sequence extends dma_sequence;
+ `uvm_object_utils(io_addr_reg_sequence)
+
+      function new(string name = "io_addr_reg_sequence");
+        super.new(name);
+      endfunction
+
+      task body();
+        read_write_reg(reg_block.io_addr_inst, status, 32'h0001DEF0);
+        repeat(20) begin
+          read_write_reg(reg_block.io_addr_inst, status, $random);
+        end
+      endtask 
+endclass
+
+class mem_addr_reg_sequence extends dma_sequence;
+  `uvm_object_utils(mem_addr_reg_sequence)
+
+      function new(string name = "mem_addr_reg_sequence");
+        super.new(name);
+      endfunction
+
+      task body();
+        read_write_reg(reg_block.mem_addr_inst, status, 32'h0001DEF0);
+        repeat(20) begin
+          read_write_reg(reg_block.mem_addr_inst, status, $random);
+        end
+      endtask 
+endclass
+
+class extra_info_reg_sequence extends dma_sequence;
+  `uvm_object_utils(extra_info_reg_sequence)
+
+      function new(string name = "extra_info_reg_sequence");
+        super.new(name);
+      endfunction
+
+      task body();
+        read_write_reg(reg_block.extra_info_inst, status, 32'h0001DEF0);
+        repeat(20) begin
+          read_write_reg(reg_block.extra_info_inst, status, $random);
+        end
+      endtask 
+endclass
+
+class descriptor_addr_reg_sequence extends dma_sequence;
+      `uvm_object_utils(descriptor_addr_reg_sequence)
+
+      function new(string name = "descriptor_addr_reg_sequence");
+        super.new(name);
+      endfunction
+
+      task body();
+        read_write_reg(reg_block.descriptor_addr_inst, status, 32'h0001DEF0);
+        repeat(20) begin
+          read_write_reg(reg_block.descriptor_addr_inst, status, $random);
+        end
+      endtask 
+endclass
+
+class config_reg_sequence extends dma_sequence;
+      `uvm_object_utils(config_reg_sequence)
+      bit [8:0] config_data;
+
+      function new(string name = "config_reg_sequence");
+        super.new(name);
+      endfunction
+
+      task body();
+        read_write_reg(reg_block.config_inst, status, 32'h00000055);
+        repeat(20) begin
+          config_data = $random;
+          read_write_reg(reg_block.config_inst, status, config_data);
+        end
+      endtask 
 endclass

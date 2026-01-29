@@ -266,6 +266,7 @@ endclass
 
 class intr_reg_sequence extends dma_sequence;
  `uvm_object_utils(intr_reg_sequence)
+   bit [31:0] intr_data;
 
   function new(string name = "intr_reg_sequence");
    super.new(name);
@@ -273,8 +274,9 @@ class intr_reg_sequence extends dma_sequence;
 
   task body();
    read_write_reg(reg_block.intr_inst, status, 32'hDEAD0000);
-   repeat(10) begin
-    read_write_reg(reg_block.intr_inst, status, $random);
+   repeat(100) begin
+    intr_data = {$random, 16'h0000};
+    read_write_reg(reg_block.intr_inst, status, intr_data);
    end
    endtask
 endclass

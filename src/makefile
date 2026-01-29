@@ -11,7 +11,7 @@ all:
 	vcover report -html dma_coverage.ucdb -htmldir covReport -details
 
 clean:
-	-rm -rf work/ transcript vsim.wlf wave.vcd vsim_stacktrace.vstf
+	-rm -rf work/ transcript vsim.wlf dump.vcd vsim_stacktrace.vstf
 	-rm -rf covReport dma_coverage.ucdb
 	-rm dma.log simulation.log
 	-rm dma_coverage.ucdb

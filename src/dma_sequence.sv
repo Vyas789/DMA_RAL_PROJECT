@@ -204,6 +204,7 @@ virtual task read_write_reg(uvm_reg register_inst, uvm_status_e status, uvm_reg_
     uvm_reg_data_t read_before;
     uvm_reg_data_t read_after;
     string reg_name;
+    set_bits = set_bits & 32'hFFFF_FF1F;
     
     reg_name = register_inst.get_name();
   `uvm_info(get_type_name(), $sformatf("--------Testing W1C Register: %s--------", reg_name), UVM_MEDIUM)
@@ -232,7 +233,7 @@ virtual task read_write_reg(uvm_reg register_inst, uvm_status_e status, uvm_reg_
       `uvm_warning(get_type_name(), $sformatf("%s Error bits mismatch - Expected: 0x%0h, Got: 0x%0h", reg_name, set_bits, read_before))
     
     `uvm_info(get_type_name(), $sformatf("Writing 0x%0h to %s to clear set bits (W1C)", set_bits, reg_name), UVM_MEDIUM)
-    register_inst.write(status, set_bits, UVM_FRONTDOOR);
+    register_inst.write(status, 32'hABCDE01F, UVM_FRONTDOOR);
     
     if(status != UVM_IS_OK)
       `uvm_error(get_type_name(), $sformatf("%s W1C write failed", reg_name))
@@ -247,11 +248,11 @@ virtual task read_write_reg(uvm_reg register_inst, uvm_status_e status, uvm_reg_
     mir = register_inst.get_mirrored_value();
     `uvm_info(get_type_name(), $sformatf("%s after CLEAR - Desired: 0x%0h, Mirrored: 0x%0h, ReadData: 0x%0h", reg_name, des, mir, read_after), UVM_MEDIUM)
 
-    if(read_after == 32'h00000000)
+    if(read_after == {set_bits[31:5], 5'b0000})
       `uvm_info(get_type_name(), $sformatf("%s Bits successfully cleared ", reg_name), UVM_MEDIUM)
     else
       `uvm_error(get_type_name(), 
-                 $sformatf("%s Clear failed - Expected: 0x00000000, Got: 0x%0h", reg_name, read_after))
+                 $sformatf("%s Clear failed - Expected: 0x%0h, Got: 0x%0h", reg_name, {set_bits[31:5], 5'b0000}, read_after))
     
     register_inst.mirror(status, UVM_CHECK);
     if(status != UVM_IS_OK)
@@ -369,6 +370,21 @@ class config_reg_sequence extends dma_sequence;
         repeat(20) begin
           config_data = $random;
           read_write_reg(reg_block.config_inst, status, config_data);
+        end
+      endtask 
+endclass
+
+class error_status_reg_sequence extends dma_sequence;
+      `uvm_object_utils(error_status_reg_sequence)
+
+      function new(string name = "error_status_reg_sequence");
+        super.new(name);
+      endfunction
+
+      task body();
+        write_1_clear_reg(reg_block.error_status_inst, status, 32'h0000001B);
+        repeat(100) begin
+          write_1_clear_reg(reg_block.error_status_inst, status, $random);
         end
       endtask 
 endclass

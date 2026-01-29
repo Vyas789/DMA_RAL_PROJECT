@@ -176,3 +176,25 @@ class config_test extends dma_test;
       phase.drop_objection(this);
   endtask
 endclass
+
+class error_status_test extends dma_test;
+  `uvm_component_utils(error_status_test)
+  
+  error_status_reg_sequence seq;
+  
+  function new(string name = "error_status_test", uvm_component parent = null);
+    super.new(name, parent);
+  endfunction
+  
+  function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+  endfunction
+  
+   task run_phase(uvm_phase phase);
+      phase.raise_objection(this);
+      seq = error_status_reg_sequence::type_id::create("seq");
+      seq.reg_block = env.reg_block;
+      seq.start(env.agent_inst.seqr);
+      phase.drop_objection(this);
+  endtask
+endclass

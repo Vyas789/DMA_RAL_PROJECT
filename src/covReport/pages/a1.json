@@ -1,0 +1,14 @@
+var g_data = {
+a1551:{
+scopes:[{s:'1240',b:'1',val:'dma_pkg'},{val:'dma_adapter'},{link:'z.htm?f=0&s=1551',val:'bus2reg'}]
+,assertions:[{dummy:0},{cr:'c',c:'g',z:'immed__20',fc:'Gr',pc:'Gr',h0:'0',h1:'126'}
+],
+},
+a2342:{
+scopes:[{s:'2031',b:'1',val:'work.dma_pkg'},{val:'dma_adapter'},{link:'z.htm?f=0&s=2342',val:'bus2reg'}]
+,assertions:[{dummy:0},{cr:'c',c:'g',z:'immed__20',fc:'Gr',pc:'Gr',h0:'0',h1:'126'}
+],
+},
+dummyEnd:0
+};
+processAssertionsData(g_data,1);

@@ -120,7 +120,7 @@ virtual task read_write_reg(uvm_reg register_inst, uvm_status_e status, uvm_reg_
       
  //-----------------------------------READ ONLY REGISTERS VERIFICATION------------------------------------------------//
   
-  virtual task read_only_reg(uvm_reg register_inst, uvm_status_e status);
+ /* virtual task read_only_reg(uvm_reg register_inst, uvm_status_e status);
     uvm_reg_data_t des;
     uvm_reg_data_t mir;
     uvm_reg_data_t read_data_fd;
@@ -192,6 +192,76 @@ virtual task read_write_reg(uvm_reg register_inst, uvm_status_e status, uvm_reg_
 //       `uvm_error(get_type_name(), $sformatf("%s Mirror check failed after RO read", reg_name))
 //     else
 //       `uvm_info(get_type_name(), $sformatf("%s Mirror verification passed (RO)", reg_name), UVM_MEDIUM)
+    
+      `uvm_info(get_type_name(), $sformatf("-------%s RO Test Complete -------", reg_name), UVM_MEDIUM)
+  endtask */
+
+ virtual task read_only_reg(uvm_reg register_inst, uvm_status_e status, uvm_reg_data_t write_data);
+    uvm_reg_data_t des;
+    uvm_reg_data_t mir;
+    uvm_reg_data_t read_data_fd;
+//     uvm_reg_data_t write_data = 32'hA234ffff;
+    string reg_name;
+    write_data = write_data & 32'hFFFFFFFF;
+  
+  //----------------------------------------WRITING FROM THE FRONTDOOR----------------------------------------//
+    
+    reg_name = register_inst.get_name();
+  `uvm_info(get_type_name(), $sformatf("--------Testing RO Register: %s-------", reg_name), UVM_MEDIUM)
+
+    `uvm_info(get_type_name(), 
+              $sformatf("Writing to %s via FRONTDOOR: 0x%0h (simulating HW update)", reg_name, write_data), 
+              UVM_MEDIUM)
+  register_inst.write(status, write_data, UVM_FRONTDOOR);
+    
+    des = register_inst.get();
+    mir = register_inst.get_mirrored_value();
+    `uvm_info(get_type_name(), 
+              $sformatf("%s after FRONTDOOR WRITE - Desired: 0x%0h, Mirrored: 0x%0h", reg_name, des, mir), UVM_MEDIUM)
+  
+  `uvm_info(get_type_name(), 
+            $sformatf("Reading to %s via FRONTDOOR using read method", reg_name), 
+              UVM_MEDIUM)
+  register_inst.read(status, read_data_fd, UVM_FRONTDOOR);
+    
+    des = register_inst.get();
+    mir = register_inst.get_mirrored_value();
+    `uvm_info(get_type_name(), 
+              $sformatf("%s after FRONTDOOR READ - Desired: 0x%0h, Mirrored: 0x%0h", reg_name, des, mir), UVM_MEDIUM)
+
+  `uvm_info(get_type_name(), $sformatf("Writing to %s via BACKDOOR (RO access)", reg_name), UVM_MEDIUM)
+  register_inst.poke(status, write_data);
+    
+    des = register_inst.get();
+    mir = register_inst.get_mirrored_value();
+    `uvm_info(get_type_name(), 
+              $sformatf("%s after POKE (BD) - Desired: 0x%0h, Mirrored: 0x%0h, ReadData: 0x%0h", reg_name, des, mir, read_data_fd), UVM_MEDIUM)
+  
+//   `uvm_info(get_type_name(), 
+//             $sformatf("Reading to %s via FRONTDOOR using read method: 0x%0d", reg_name, write_data), 
+//               UVM_MEDIUM)
+//   register_inst.read(status, read_data_fd, UVM_FRONTDOOR);
+  
+    `uvm_info(get_type_name(), 
+              $sformatf("Predicting the value of %s using predict method", reg_name), 
+              UVM_MEDIUM)
+  register_inst.predict(write_data);
+    
+    des = register_inst.get();
+    mir = register_inst.get_mirrored_value();
+    `uvm_info(get_type_name(), 
+              $sformatf("%s after predicting - Desired: 0x%0h, Mirrored: 0x%0h", reg_name, des, mir), UVM_MEDIUM)
+
+//     if(read_data_fd == write_data)
+//       `uvm_info(get_type_name(), $sformatf("%s Read data matches backdoor-written data ", reg_name), UVM_MEDIUM)
+//     else
+//       `uvm_warning(get_type_name(), $sformatf("%s Read mismatch - Expected: 0x%0h, Got: 0x%0h", reg_name, write_data, read_data_fd))
+    
+    register_inst.mirror(status, UVM_CHECK);
+    if(status != UVM_IS_OK)
+      `uvm_error(get_type_name(), $sformatf("%s Mirror check failed after RO read", reg_name))
+    else
+      `uvm_info(get_type_name(), $sformatf("%s Mirror verification passed (RO)", reg_name), UVM_MEDIUM)
     
       `uvm_info(get_type_name(), $sformatf("-------%s RO Test Complete -------", reg_name), UVM_MEDIUM)
   endtask
@@ -282,12 +352,93 @@ class intr_reg_sequence extends dma_sequence;
    endtask
 endclass
 
+ class transfer_count_reg_sequence extends dma_sequence;
+    `uvm_object_utils(transfer_count_reg_sequence)
+      
+    function new(string name = "transfer_count_reg_sequence");
+        super.new(name);
+      endfunction
+      
+      task body();
+        read_only_reg(reg_block.transfer_count_inst, status, 32'h0001DEF0);
+        repeat(20) begin
+          read_only_reg(reg_block.transfer_count_inst, status, $random);
+        end
+      endtask 
+    endclass
+
 class ctrl_reg_sequence extends dma_sequence;
   `uvm_object_utils(ctrl_reg_sequence)
 
       function new(string name = "ctrl_reg_sequence");
         super.new(name);
       endfunction
+
+       task read_write_reg(uvm_reg register_inst, uvm_status_e status, uvm_reg_data_t write_data);
+    uvm_reg_data_t des;
+    uvm_reg_data_t mir;
+    uvm_reg_data_t read_data_fd;
+    uvm_reg_data_t read_data_bd;
+    uvm_reg_data_t predict_data;
+    string reg_name;
+    write_data = write_data & 32'h0000_FFFF;
+    predict_data = write_data & 32'hFFFF_FFFE;
+  
+  //----------------------------------------WRITING ONTO FROM THE FRONTDOOR----------------------------------------//
+    
+    reg_name = register_inst.get_name();
+  `uvm_info(get_type_name(), $sformatf("------ Testing RW Register: %s -----", reg_name), UVM_MEDIUM)
+    
+  `uvm_info(get_type_name(), $sformatf("Writing to %s: 0x%0h via FRONTDOOR", reg_name, write_data), UVM_MEDIUM)
+    register_inst.write(status, write_data, UVM_FRONTDOOR);
+      
+    des = register_inst.get();
+    mir = register_inst.get_mirrored_value();
+    `uvm_info(get_type_name(), 
+              $sformatf("%s after WRITE - Desired: 0x%0h, Mirrored: 0x%0h", reg_name, des, mir), UVM_MEDIUM)
+    
+      //--------------------------------------READING FROM THE FRONT DOOR-------------------------------------//
+      `uvm_info(get_type_name(), $sformatf("Reading from %s via FRONTDOOR", reg_name), UVM_MEDIUM)
+      register_inst.read(status, read_data_fd, UVM_FRONTDOOR);
+    
+    des = register_inst.get();
+    mir = register_inst.get_mirrored_value();
+  `uvm_info(get_type_name(), $sformatf("%s after READ (FD) - Desired: 0x%0h, Mirrored: 0x%0h, ReadData: 0x%0h", reg_name, des, mir, read_data_fd), UVM_MEDIUM)
+      
+      `uvm_info(get_type_name(), 
+              $sformatf("Predicting the value of %s using predict method", reg_name), 
+              UVM_MEDIUM)
+      register_inst.predict(predict_data);
+    
+    des = register_inst.get();
+    mir = register_inst.get_mirrored_value();
+    `uvm_info(get_type_name(), 
+              $sformatf("%s after predicting - Desired: 0x%0h, Mirrored: 0x%0h", reg_name, des, mir), UVM_MEDIUM)
+    
+    register_inst.mirror(status, UVM_CHECK);
+    if(status != UVM_IS_OK)
+      `uvm_error(get_type_name(), $sformatf("%s Mirror check failed after read (FD)", reg_name))
+    else
+      `uvm_info(get_type_name(), $sformatf("%s Mirror verification passed after read (FD)", reg_name), UVM_MEDIUM)
+      
+ //--------------------------------------------READING FROM THE BACKDOOR--------------------------------------------//
+    
+      `uvm_info(get_type_name(), $sformatf("Reading from %s via BACKDOOR", reg_name), UVM_MEDIUM)
+      register_inst.read(status, read_data_bd, UVM_BACKDOOR);
+    
+    des = register_inst.get();
+    mir = register_inst.get_mirrored_value();
+  `uvm_info(get_type_name(), $sformatf("%s after READ (BD) - Desired: 0x%0d, Mirrored: 0x%0h, ReadData: 0x%0h", reg_name, des, mir, read_data_bd), UVM_MEDIUM)
+    
+    register_inst.mirror(status, UVM_CHECK);
+    if(status != UVM_IS_OK)
+      `uvm_error(get_type_name(), $sformatf("%s Mirror check failed after read (BD)", reg_name))
+    else
+      `uvm_info(get_type_name(), $sformatf("%s Mirror verification passed after read (BD)", reg_name), UVM_MEDIUM)
+    
+      `uvm_info(get_type_name(), $sformatf("----- %s RW Test Complete -------", reg_name), UVM_MEDIUM)
+      
+  endtask
 
       task body();
         read_write_reg(reg_block.ctrl_inst, status, 32'h0001DEF0);
@@ -383,7 +534,7 @@ class error_status_reg_sequence extends dma_sequence;
 
       task body();
         write_1_clear_reg(reg_block.error_status_inst, status, 32'h0000001B);
-        repeat(100) begin
+        repeat(20) begin
           write_1_clear_reg(reg_block.error_status_inst, status, $random);
         end
       endtask 

@@ -221,3 +221,27 @@ class transfer_count_test extends dma_test;
   endtask
 endclass
 
+class regression_test extends uvm_test;
+  `uvm_component_utils(regression_test)
+  
+  dma_env env;
+  regression_reg_sequence seq;
+  
+  function new(string name = "regression_test", uvm_component parent = null);
+    super.new(name, parent);
+  endfunction
+  
+  function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    env = dma_env::type_id::create("env", this);
+  endfunction
+  
+  task run_phase(uvm_phase phase);
+    phase.raise_objection(this);
+    seq = regression_reg_sequence::type_id::create("seq");
+    seq.reg_block = env.reg_block;
+    seq.start(env.agent_inst.seqr);
+
+    phase.drop_objection(this);
+  endtask
+endclass

@@ -344,6 +344,7 @@ class intr_reg_sequence extends dma_sequence;
   endfunction
 
   task body();
+read_write_reg(reg_block.intr_inst, status, 32'h00000000);
    read_write_reg(reg_block.intr_inst, status, 32'hDEAD0000);
    repeat(100) begin
     intr_data = {$random, 16'h0000};
@@ -442,7 +443,7 @@ class ctrl_reg_sequence extends dma_sequence;
 
       task body();
         read_write_reg(reg_block.ctrl_inst, status, 32'h0001DEF0);
-        repeat(10) begin
+        repeat(100) begin
           read_write_reg(reg_block.ctrl_inst, status, $random);
         end
       endtask 
@@ -457,7 +458,9 @@ class io_addr_reg_sequence extends dma_sequence;
 
       task body();
         read_write_reg(reg_block.io_addr_inst, status, 32'h0001DEF0);
-        repeat(20) begin
+        read_write_reg(reg_block.io_addr_inst, status, 32'h0000_0A5C);
+        read_write_reg(reg_block.io_addr_inst, status, 32'h0000_45AB);
+        repeat(50) begin
           read_write_reg(reg_block.io_addr_inst, status, $random);
         end
       endtask 
@@ -486,6 +489,7 @@ class extra_info_reg_sequence extends dma_sequence;
       endfunction
 
       task body();
+       read_write_reg(reg_block.extra_info_inst, status, 32'h00000000);
         read_write_reg(reg_block.extra_info_inst, status, 32'h0001DEF0);
         repeat(20) begin
           read_write_reg(reg_block.extra_info_inst, status, $random);
@@ -538,4 +542,67 @@ class error_status_reg_sequence extends dma_sequence;
           write_1_clear_reg(reg_block.error_status_inst, status, $random);
         end
       endtask 
+endclass
+
+ class regression_reg_sequence extends dma_sequence;
+    `uvm_object_utils(regression_reg_sequence)
+    
+    dma_reg_block reg_block;
+
+//   reset_dma_seq             s1;
+  intr_reg_sequence         s2;
+  transfer_count_reg_sequence s8;
+  ctrl_reg_sequence         s3;
+  io_addr_reg_sequence      s4;
+  mem_addr_reg_sequence     s5;
+  extra_info_reg_sequence   s6;
+//   status_reg_sequence       s7;
+  descriptor_addr_reg_sequence s9;
+  error_status_reg_sequence s10;
+  config_reg_sequence       s11;
+    
+    function new(string name = "regression_reg_sequence");
+      super.new(name);
+    endfunction
+    
+     task body();
+
+
+//     s1  = reset_dma_seq::type_id::create("s1");
+    s2  = intr_reg_sequence::type_id::create("s2");
+    s3  = ctrl_reg_sequence::type_id::create("s3");
+    s4  = io_addr_reg_sequence::type_id::create("s4");
+    s5  = mem_addr_reg_sequence::type_id::create("s5");
+    s6  = extra_info_reg_sequence::type_id::create("s6");
+//     s7  = status_reg_sequence::type_id::create("s7");
+    s8  = transfer_count_reg_sequence::type_id::create("s8");
+    s9  = descriptor_addr_reg_sequence::type_id::create("s9");
+    s10 = error_status_reg_sequence::type_id::create("s10");
+    s11 = config_reg_sequence::type_id::create("s11");
+
+// s1.reg_block  = reg_block;
+s2.reg_block  = reg_block;
+s3.reg_block  = reg_block;
+s4.reg_block  = reg_block;
+s5.reg_block  = reg_block;
+s6.reg_block  = reg_block;
+// s7.reg_block  = reg_block;
+s8.reg_block  = reg_block;
+s9.reg_block  = reg_block;
+s10.reg_block = reg_block;
+s11.reg_block = reg_block;
+
+    //s1.start(m_sequencer);
+    s2.start(m_sequencer);
+    s8.start(m_sequencer);
+    s3.start(m_sequencer);
+    s4.start(m_sequencer);
+    s5.start(m_sequencer);
+    s6.start(m_sequencer);
+//     s7.start(m_sequencer);
+    s9.start(m_sequencer);
+    s10.start(m_sequencer);
+    s11.start(m_sequencer);
+
+  endtask
 endclass

@@ -335,6 +335,25 @@ virtual task read_write_reg(uvm_reg register_inst, uvm_status_e status, uvm_reg_
     
 endclass
 
+class reset_dma_seq extends dma_sequence;
+  `uvm_object_utils(reset_dma_seq)
+
+  uvm_status_e status;
+
+  function new(string name="reset_dma_seq");
+    super.new(name);
+  endfunction
+
+  task body();
+
+    reg_block.reset();
+    reg_block.mirror(status, UVM_CHECK);
+
+    `uvm_info(get_type_name(),"reset test completed",UVM_LOW)
+
+  endtask
+endclass    
+
 class intr_reg_sequence extends dma_sequence;
  `uvm_object_utils(intr_reg_sequence)
    bit [31:0] intr_data;
@@ -549,7 +568,7 @@ endclass
     
     dma_reg_block reg_block;
 
-//   reset_dma_seq             s1;
+  reset_dma_seq             s1;
   intr_reg_sequence         s2;
   transfer_count_reg_sequence s8;
   ctrl_reg_sequence         s3;
@@ -568,7 +587,7 @@ endclass
      task body();
 
 
-//     s1  = reset_dma_seq::type_id::create("s1");
+    s1  = reset_dma_seq::type_id::create("s1");
     s2  = intr_reg_sequence::type_id::create("s2");
     s3  = ctrl_reg_sequence::type_id::create("s3");
     s4  = io_addr_reg_sequence::type_id::create("s4");
@@ -580,7 +599,7 @@ endclass
     s10 = error_status_reg_sequence::type_id::create("s10");
     s11 = config_reg_sequence::type_id::create("s11");
 
-// s1.reg_block  = reg_block;
+s1.reg_block  = reg_block;
 s2.reg_block  = reg_block;
 s3.reg_block  = reg_block;
 s4.reg_block  = reg_block;
@@ -592,7 +611,7 @@ s9.reg_block  = reg_block;
 s10.reg_block = reg_block;
 s11.reg_block = reg_block;
 
-    //s1.start(m_sequencer);
+    s1.start(m_sequencer);
     s2.start(m_sequencer);
     s8.start(m_sequencer);
     s3.start(m_sequencer);
